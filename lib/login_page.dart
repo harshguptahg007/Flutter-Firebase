@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase/home_page.dart';
 import 'package:flutter_firebase/sign_in_page.dart';
+import 'package:flutter_firebase/user_repository.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -10,6 +12,9 @@ class _LoginPageState extends State<LoginPage> {
 
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
+  UserRepository userRepository = new UserRepository();
+
+  bool loginPressed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   new RaisedButton(
-                      child: Text('Sign in'),
+                      child: Text('Sign Up'),
                       onPressed: (){
                         _navigateToSignInPage(context);
                       },
@@ -63,6 +68,9 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text('Log in'),
                     onPressed: (){
                       //TODO : log in over here
+                      userRepository.signInWithCredentials(emailController.text, passwordController.text).then((data){
+                        _navigateToHomePage(context);
+                      });
                     },
                   ),
                 ],
@@ -70,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
               new RaisedButton(
                 child: Text('Login with Google'),
                 onPressed: () {
-                  //TODO : google sign up code here
+                  loginUser(context);
                 },
               ),
             ],
@@ -82,5 +90,16 @@ class _LoginPageState extends State<LoginPage> {
 
   _navigateToSignInPage(BuildContext context){
     Navigator.push(context, MaterialPageRoute(builder: (context)=>SignInPage()));
+  }
+
+  loginUser(BuildContext context) async {
+    userRepository.signInWithGoogle().then((data){
+      print(data);
+      _navigateToHomePage(context);
+    });
+  }
+
+  _navigateToHomePage(BuildContext context){
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
   }
 }

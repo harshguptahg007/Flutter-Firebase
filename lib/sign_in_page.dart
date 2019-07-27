@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase/home_page.dart';
+import 'package:flutter_firebase/user_repository.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -9,6 +11,8 @@ class _SignInPageState extends State<SignInPage> {
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
   TextEditingController checkPasswordController = new TextEditingController();
+
+  UserRepository userRepository = new UserRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +69,14 @@ class _SignInPageState extends State<SignInPage> {
                   child: Text('Sign Up'),
                   onPressed: () {
                     //TODO : sign up code here
+                    userRepository
+                        .signUp(
+                            email: emailController.text,
+                            password: passwordController.text)
+                        .then((data) {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => HomePage()));
+                    });
                   },
                 ),
               ),
