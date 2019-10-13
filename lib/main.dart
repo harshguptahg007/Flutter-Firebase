@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/login_page.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(FlutterFirebase());
 
-class MyApp extends StatelessWidget {
+class FlutterFirebase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Firebase',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

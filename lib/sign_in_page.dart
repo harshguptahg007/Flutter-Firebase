@@ -1,6 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/home_page.dart';
-import 'package:flutter_firebase/user_repository.dart';
+import 'package:flutter_firebase/firebase_functions.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -40,9 +41,6 @@ class _SignInPageState extends State<SignInPage> {
                   controller: emailController,
                 ),
               ),
-              new SizedBox(
-                height: 15.0,
-              ),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 8.0),
                 padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
@@ -63,19 +61,20 @@ class _SignInPageState extends State<SignInPage> {
                   controller: checkPasswordController,
                 ),
               ),
+              new SizedBox(
+                height: 15.0,
+              ),
               Container(
                 alignment: Alignment.centerRight,
                 child: new RaisedButton(
                   child: Text('Sign Up'),
                   onPressed: () {
-                    //TODO : sign up code here
                     userRepository
                         .signUp(
                             email: emailController.text,
                             password: passwordController.text)
                         .then((data) {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => HomePage()));
+                      _navigateToHomePage(context, data);
                     });
                   },
                 ),
@@ -85,5 +84,10 @@ class _SignInPageState extends State<SignInPage> {
         ),
       ),
     );
+  }
+
+  _navigateToHomePage(BuildContext context, FirebaseUser user) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => HomePage(user: user)));
   }
 }

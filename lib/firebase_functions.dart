@@ -21,7 +21,9 @@ class UserRepository {
       idToken: googleSignInAuthentication.idToken,
     );
 
-    final FirebaseUser user = await _firebaseAuth.signInWithCredential(credential);
+    AuthResult result = await _firebaseAuth.signInWithCredential(credential);
+
+    final FirebaseUser user = result.user;
 
     assert(!user.isAnonymous);
     assert(await user.getIdToken() != null);
@@ -32,18 +34,20 @@ class UserRepository {
     return currentUser;
   }
 
-  Future<void> signInWithCredentials(String email, String password) {
-    return _firebaseAuth.signInWithEmailAndPassword(
+  Future<FirebaseUser> signInWithCredentials(String email, String password) async {
+    AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
+    return result.user;
   }
 
-  Future<void> signUp({String email, String password}) async {
-    return await _firebaseAuth.createUserWithEmailAndPassword(
+  Future<FirebaseUser> signUp({String email, String password}) async {
+    AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
+    return result.user;
   }
 
   Future<void> signOut() async {
